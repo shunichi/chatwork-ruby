@@ -12,6 +12,9 @@ module ChatWork
         rescue JSON::ParserError => e
           return ChatWork::APIConnectionError.new("Response JSON is broken. #{e.message}: #{body}", e)
         end
+      if hash.nil?
+        return APIError.new(status, ['Unexpected response', body, headers])
+      end
       unless hash['errors']
         return APIConnectionError.new("Invalid response #{body}")
       end
